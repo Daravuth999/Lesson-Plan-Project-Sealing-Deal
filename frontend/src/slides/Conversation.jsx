@@ -2,6 +2,8 @@ import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DIALOGUE_PART_1, DIALOGUE_PART_2, VOCAB } from "../data/lesson";
 import ClickReveal from "../components/ClickReveal";
+import SpeakerAvatar from "../components/SpeakerAvatar";
+import NowSpeakingCaption from "../components/NowSpeakingCaption";
 
 const vocabLookup = Object.fromEntries(VOCAB.map((v) => [v.word.toLowerCase(), v]));
 
@@ -60,21 +62,20 @@ export function Slide10() {
       </h2>
       <div className="grid grid-cols-2 gap-14 max-w-5xl">
         {[
-          { name: "Sarah", role: "Vendor", tag: "Sales & Partnerships", accent: "text-gold-300" },
-          { name: "David", role: "Client", tag: "Head of Procurement", accent: "text-thoughtful" },
+          { name: "Sarah", tag: "Sales & Partnerships" },
+          { name: "David", tag: "Head of Procurement" },
         ].map((p, i) => (
           <motion.div
             key={p.name}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 + i * 0.15, duration: 0.5 }}
-            className="border-l-2 border-gold-300/40 pl-6"
+            transition={{ delay: 0.15 + i * 0.15, duration: 0.6 }}
+            className="flex flex-col gap-4"
           >
-            <div className={`mono text-xs uppercase tracking-[0.32em] mb-2 ${p.accent}`}>
-              {p.role}
+            <div className="scale-[1.6] origin-left">
+              <SpeakerAvatar role={p.name} active size={72} />
             </div>
-            <div className="heading-serif text-6xl text-gold-50 mb-2">{p.name}</div>
-            <div className="text-gray-400 italic">{p.tag}</div>
+            <div className="text-gray-400 italic text-lg mt-6">{p.tag}</div>
           </motion.div>
         ))}
       </div>
@@ -93,28 +94,48 @@ export function Slide10() {
 /* -------------------- Dialogue slide helper -------------------- */
 function DialogueSlide({ screenLabel, part, showTitle }) {
   const [activeCue, setActiveCue] = useState(null);
+  const [activeTurn, setActiveTurn] = useState(0);
+  const currentRole = part[activeTurn]?.role || "Sarah";
   return (
-    <div className="h-full w-full px-14 py-8 flex flex-col">
+    <div className="h-full w-full px-14 py-6 flex flex-col">
       <div className="flex items-center justify-between mb-3">
         <div className="mono text-xs uppercase tracking-[0.32em] text-gold-300">
           {screenLabel}
         </div>
-        <div className="mono text-[10px] uppercase tracking-widest text-gray-500">
-          Click any highlighted word for a cue
-        </div>
+        <AnimatePresence mode="wait">
+          <NowSpeakingCaption
+            key={currentRole + "-" + activeTurn}
+            role={currentRole}
+            subtitle={currentRole === "Sarah" ? "Vendor" : "Client"}
+          />
+        </AnimatePresence>
       </div>
-      <h2 className="heading-serif text-3xl text-gold-50 mb-4">{showTitle}</h2>
+      <div className="flex items-center gap-6 mb-3">
+        <SpeakerAvatar role="Sarah" active={currentRole === "Sarah"} size={44} />
+        <div className="flex-1 h-px bg-gold-300/15" />
+        <SpeakerAvatar role="David" active={currentRole === "David"} size={44} />
+      </div>
+      <h2 className="heading-serif text-2xl text-gold-50 mb-3">{showTitle}</h2>
       <div className="flex-1 overflow-y-auto scroll-elegant pr-4 -mr-2">
-        <div className="space-y-4 max-w-5xl">
+        <div className="space-y-3 max-w-5xl">
           {part.map((turn, idx) => {
             const isSarah = turn.role === "Sarah";
+            const isActive = activeTurn === idx;
             return (
-              <motion.div
+              <motion.button
                 key={idx}
+                onClick={() => setActiveTurn(idx)}
                 initial={{ opacity: 0, x: isSarah ? -14 : 14 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.05 * idx, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className={`flex gap-4 ${isSarah ? "" : "flex-row-reverse text-right"}`}
+                animate={{
+                  opacity: isActive ? 1 : 0.55,
+                  x: 0,
+                  scale: isActive ? 1 : 0.99,
+                }}
+                transition={{ delay: 0.03 * idx, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className={`w-full flex gap-4 text-left ${
+                  isSarah ? "" : "flex-row-reverse text-right"
+                }`}
+                data-testid={`turn-${idx}`}
               >
                 <div
                   className={`shrink-0 w-14 heading-serif text-lg pt-1 ${
@@ -124,15 +145,19 @@ function DialogueSlide({ screenLabel, part, showTitle }) {
                   {turn.role}
                 </div>
                 <div
-                  className={`text-lg leading-relaxed text-gray-100 max-w-3xl ${
+                  className={`text-lg leading-relaxed text-gray-100 max-w-3xl rounded-md px-5 py-3 transition-all ${
                     isSarah
-                      ? "bg-gold-300/5 border-l-2 border-gold-300/40"
+                      ? isActive
+                        ? "bg-gold-300/10 border-l-4 border-gold-300 shadow-[0_0_24px_rgba(230,184,99,0.15)]"
+                        : "bg-gold-300/5 border-l-2 border-gold-300/40"
+                      : isActive
+                      ? "bg-thoughtful/10 border-r-4 border-thoughtful shadow-[0_0_24px_rgba(107,168,232,0.15)]"
                       : "bg-thoughtful/5 border-r-2 border-thoughtful/40"
-                  } rounded-md px-5 py-3`}
+                  }`}
                 >
                   {renderLine(turn.line, `${screenLabel}-${idx}`, activeCue, setActiveCue)}
                 </div>
-              </motion.div>
+              </motion.button>
             );
           })}
         </div>

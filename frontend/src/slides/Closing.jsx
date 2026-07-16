@@ -82,6 +82,7 @@ export function Slide33() {
 /* -------------------- Screen 34 — Closing -------------------- */
 export function Slide34() {
   const [tick, setTick] = useState(0);
+  const [sigTick, setSigTick] = useState(0);
   return (
     <div className="relative h-full w-full grain flex items-center justify-center px-24">
       <div
@@ -99,7 +100,7 @@ export function Slide34() {
           className="mono text-xs uppercase tracking-[0.42em] text-gold-300 mb-6 flex items-center gap-4"
         >
           <span className="inline-block w-10 h-px bg-gold-300" />
-          Today's Skill
+          Today&apos;s Skill
         </motion.div>
         <motion.h2
           initial={{ opacity: 0, y: 14 }}
@@ -116,19 +117,93 @@ export function Slide34() {
           className="mt-8 mb-4"
         >
           <div className="heading-serif text-[6rem] leading-none text-gold-50 italic">
-            "Let's get it signed."
+            &ldquo;Let&apos;s get it signed.&rdquo;
           </div>
         </motion.div>
         <div className="mt-2">
           <IntonationCurve type="falling" width={520} height={90} triggerKey={tick} label="confident, falling" />
         </div>
-        <button
-          data-testid="closing-replay"
-          onClick={() => setTick((t) => t + 1)}
-          className="mt-8 mono text-[10px] uppercase tracking-widest px-4 py-2 rounded-full border border-gold-300/40 text-gold-100 hover:bg-gold-300/15"
+
+        {/* Signature reveal on contract line */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="mt-10 flex items-center gap-6"
         >
-          Replay intonation
-        </button>
+          <div className="mono text-[10px] uppercase tracking-[0.32em] text-gold-300">
+            Signed
+          </div>
+          <div className="relative">
+            <svg width="380" height="90" viewBox="0 0 380 90" className="overflow-visible">
+              {/* Contract line */}
+              <motion.line
+                x1="0"
+                y1="70"
+                x2="380"
+                y2="70"
+                stroke="#DEB966"
+                strokeOpacity="0.5"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              />
+              {/* Signature stroke */}
+              <motion.path
+                key={"sig-" + sigTick}
+                d="M 8 55 C 18 25, 30 25, 40 55 S 60 78, 78 40 Q 96 8, 116 50 T 154 55 Q 178 30, 200 55 C 218 78, 240 20, 262 50 Q 288 78, 316 40 T 372 55"
+                stroke="#E6B863"
+                strokeWidth="2.5"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ filter: "drop-shadow(0 0 6px rgba(230,184,99,0.6))" }}
+                initial={{ pathLength: 0, opacity: 0.2 }}
+                animate={{ pathLength: 1, opacity: 1 }}
+                transition={{ duration: 2.4, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              />
+              {/* Wax seal */}
+              <motion.g
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 3.0, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                style={{ transformOrigin: "340px 30px" }}
+              >
+                <circle cx="340" cy="30" r="18" fill="#8E2A2A" stroke="#E6B863" strokeWidth="1.5" />
+                <text
+                  x="340"
+                  y="35"
+                  textAnchor="middle"
+                  fontFamily="Cormorant Garamond, serif"
+                  fontStyle="italic"
+                  fontSize="16"
+                  fill="#E6B863"
+                >
+                  S
+                </text>
+              </motion.g>
+            </svg>
+          </div>
+        </motion.div>
+
+        <div className="mt-8 flex gap-3">
+          <button
+            data-testid="closing-replay"
+            onClick={() => setTick((t) => t + 1)}
+            className="mono text-[10px] uppercase tracking-widest px-4 py-2 rounded-full border border-gold-300/40 text-gold-100 hover:bg-gold-300/15"
+          >
+            Replay intonation
+          </button>
+          <button
+            data-testid="closing-sign-again"
+            onClick={() => setSigTick((t) => t + 1)}
+            className="mono text-[10px] uppercase tracking-widest px-4 py-2 rounded-full border border-gold-300 bg-gold-300/15 text-gold-50 hover:bg-gold-300/25"
+          >
+            Sign again
+          </button>
+        </div>
       </div>
     </div>
   );

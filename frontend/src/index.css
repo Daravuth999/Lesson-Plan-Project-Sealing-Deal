@@ -114,3 +114,39 @@ button:focus-visible,
   from { stroke-dashoffset: var(--len, 300); }
   to { stroke-dashoffset: 0; }
 }
+
+/* Zoom-Safe mode — activated by ?zoom=1 URL param or Z key */
+.zoom-safe .heading-serif { letter-spacing: 0.01em; }
+.zoom-safe .mono { letter-spacing: 0.06em; }
+.zoom-safe svg path,
+.zoom-safe svg line,
+.zoom-safe svg circle {
+  stroke-width: calc(var(--sw, 2.5) * 1.6);
+}
+.zoom-safe .cue-word {
+  padding: 2px 4px;
+}
+.zoom-safe .text-gray-400,
+.zoom-safe .text-gray-500 {
+  color: #C7CDD3 !important;
+}
+.zoom-safe .text-gray-300 {
+  color: #E4E9EE !important;
+}
+.zoom-safe .stage-frame {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Ambient boardroom vignette */
+.stage-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 800px at 50% 110%, rgba(0,0,0,0.6), transparent 60%),
+    radial-gradient(1200px 800px at 50% -20%, rgba(0,0,0,0.35), transparent 60%);
+}
+
+/* Hide default cursor when laser/ink active is handled from PresenterTools */
