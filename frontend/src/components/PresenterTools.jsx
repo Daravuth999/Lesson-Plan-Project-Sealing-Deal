@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Eraser, MessageSquare, Pointer, Pencil, Type, X, Send } from "lucide-react";
+import { Eraser, MessageSquare, Pointer, Pencil, Type, X, Send, Library, EyeOff } from "lucide-react";
 
 /**
  * PresenterTools — Zoom-native instructor superpowers.
@@ -10,8 +10,13 @@ import { Eraser, MessageSquare, Pointer, Pencil, Type, X, Send } from "lucide-re
  * - Zoom-Safe Scale (Z)    : +15% type scale, thicker strokes, higher contrast for shared-screen legibility
  *
  * Also exposes a small floating toolbelt so instructor can toggle by click, not just keyboard.
+ *
+ * PRIVACY: the toolbelt and status chips are HIDDEN by default so students
+ * never see instructor controls on a shared Zoom screen. Press P to toggle
+ * the presenter HUD; the tools themselves stay usable via hotkeys either way.
  */
 export default function PresenterTools({ zoomSafe, setZoomSafe }) {
+  const [hudOn, setHudOn] = useState(false);
   const [laserOn, setLaserOn] = useState(false);
   const [inkOn, setInkOn] = useState(false);
   const [chatOn, setChatOn] = useState(false);
@@ -31,7 +36,9 @@ export default function PresenterTools({ zoomSafe, setZoomSafe }) {
       const t = e.target;
       if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
 
-      if (e.key === "l" || e.key === "L") {
+      if (e.key === "p" || e.key === "P") {
+        setHudOn((v) => !v);
+      } else if (e.key === "l" || e.key === "L") {
         setLaserOn((v) => !v);
       } else if (e.key === "i" || e.key === "I") {
         setInkOn((v) => !v);
@@ -49,6 +56,7 @@ export default function PresenterTools({ zoomSafe, setZoomSafe }) {
         setLaserOn(false);
         setInkOn(false);
         setChatOn(false);
+        setHudOn(false);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -202,27 +210,47 @@ export default function PresenterTools({ zoomSafe, setZoomSafe }) {
         </>
       )}
 
-      {/* ---- Toolbelt ---- */}
-      <div
-        className="fixed top-1/2 -translate-y-1/2 right-3 z-[60] flex flex-col gap-2 pointer-events-auto"
-        data-testid="presenter-toolbelt"
-      >
-        <ToolButton active={laserOn} onClick={() => setLaserOn((v) => !v)} label="Laser · L" testId="tool-laser">
-          <Pointer size={16} />
-        </ToolButton>
-        <ToolButton active={inkOn} onClick={() => setInkOn((v) => !v)} label="Ink · I" testId="tool-ink">
-          <Pencil size={16} />
-        </ToolButton>
-        <ToolButton active={strokes.length > 0} onClick={() => setStrokes([])} label="Erase · E" testId="tool-erase">
-          <Eraser size={16} />
-        </ToolButton>
-        <ToolButton active={chatOn} onClick={() => setChatOn((v) => !v)} label="Chat Wall · C" testId="tool-chat">
-          <MessageSquare size={16} />
-        </ToolButton>
-        <ToolButton active={zoomSafe} onClick={() => setZoomSafe((v) => !v)} label="Zoom-Safe · Z" testId="tool-zoom">
-          <Type size={16} />
-        </ToolButton>
-      </div>
+      {/* ---- Toolbelt (instructor HUD — hidden from students; press P) ---- */}
+      <AnimatePresence>
+        {hudOn && (
+          <motion.div
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed top-1/2 -translate-y-1/2 right-3 z-[60] flex flex-col gap-2 pointer-events-auto"
+            data-testid="presenter-toolbelt"
+          >
+            <ToolButton active={laserOn} onClick={() => setLaserOn((v) => !v)} label="Laser · L" testId="tool-laser">
+              <Pointer size={16} />
+            </ToolButton>
+            <ToolButton active={inkOn} onClick={() => setInkOn((v) => !v)} label="Ink · I" testId="tool-ink">
+              <Pencil size={16} />
+            </ToolButton>
+            <ToolButton active={strokes.length > 0} onClick={() => setStrokes([])} label="Erase · E" testId="tool-erase">
+              <Eraser size={16} />
+            </ToolButton>
+            <ToolButton active={chatOn} onClick={() => setChatOn((v) => !v)} label="Chat Wall · C" testId="tool-chat">
+              <MessageSquare size={16} />
+            </ToolButton>
+            <ToolButton active={zoomSafe} onClick={() => setZoomSafe((v) => !v)} label="Zoom-Safe · Z" testId="tool-zoom">
+              <Type size={16} />
+            </ToolButton>
+            <div className="h-px w-6 bg-gold-300/25 self-center my-1" />
+            <ToolButton
+              active={false}
+              onClick={() => (window.location.hash = "#/library")}
+              label="Lesson Library"
+              testId="tool-library"
+            >
+              <Library size={16} />
+            </ToolButton>
+            <ToolButton active={false} onClick={() => setHudOn(false)} label="Hide HUD · P" testId="tool-hide-hud">
+              <EyeOff size={16} />
+            </ToolButton>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ---- Chat Wall panel ---- */}
       <AnimatePresence>
@@ -317,12 +345,14 @@ export default function PresenterTools({ zoomSafe, setZoomSafe }) {
         )}
       </AnimatePresence>
 
-      {/* ---- Status HUD (top-left, instructor-only, subtle) ---- */}
-      <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[55] flex gap-1.5 mono text-[9px] uppercase tracking-[0.32em] pointer-events-none">
-        {laserOn && <HudChip color="#E6B863" label="Laser" />}
-        {inkOn && <HudChip color="#E6B863" label="Ink" />}
-        {zoomSafe && <HudChip color="#6BA8E8" label="Zoom-Safe" />}
-      </div>
+      {/* ---- Status chips (only while the instructor HUD is open) ---- */}
+      {hudOn && (
+        <div className="fixed top-3 left-1/2 -translate-x-1/2 z-[55] flex gap-1.5 mono text-[9px] uppercase tracking-[0.32em] pointer-events-none">
+          {laserOn && <HudChip color="#E6B863" label="Laser" />}
+          {inkOn && <HudChip color="#E6B863" label="Ink" />}
+          {zoomSafe && <HudChip color="#6BA8E8" label="Zoom-Safe" />}
+        </div>
+      )}
     </>
   );
 }

@@ -1,5 +1,5 @@
 # Presenter Cheat Sheet
-### Sealing the Deal · V1
+### English Speaking Lab · Lesson Factory · V2
 
 Print this and keep it next to your keyboard.
 
@@ -8,18 +8,36 @@ Print this and keep it next to your keyboard.
 |-----|--------|
 | `→` `Space` `PgDn` | Next slide |
 | `←` `PgUp` | Previous slide |
-| `⊞` icon | Section menu (jump to any of 9 sections) |
-| `Esc` | Close any open overlay |
+| `⊞` icon | Section menu (jump to any section) |
+| `Esc` | Close any open overlay + hide the HUD |
 
 ## Presenter tools
+**All instructor controls are invisible to students.** Press `P` to show/hide
+your HUD (the toolbelt on the right). The hotkeys below work even while the
+HUD is hidden, so nothing instructor-facing ever appears on the shared screen.
+
 | Key | Tool | Best used for |
 |-----|------|---------------|
+| `P` | Presenter HUD | Show/hide your toolbelt (students never need to see it) |
 | `L` | Laser Pointer | Pointing at a specific word / phrase |
 | `I` | Ink Mode | Underlining stress · circling vocab · sketching curves |
 | `Ctrl+Z` (during Ink) | Undo last stroke | Removing an accidental line |
 | `E` | Erase all ink | Clearing the slide of annotations |
 | `C` | Chat Wall | Displaying student Zoom-chat responses |
 | `Z` | Zoom-Safe Scale | Bump size + contrast when students are on phones |
+
+## Lesson Library (multi-lesson factory)
+- Press `P` → click the **book icon** (or open `#/library`) to switch lessons.
+- The root URL always opens **Sealing the Deal**, exactly as your students know it.
+- Each lesson also has a direct link: `#/lesson/<name>`.
+- Add `?screen=14` to any lesson URL to resume directly at screen 14 after a refresh.
+- New lessons are plain content files: duplicate
+  `frontend/src/lessons/_lesson-template.js`, fill in YOUR content, register it
+  in `lessons/index.js`. Blocks available: title, outcomes, image, **story**
+  (storytelling beats), **dialogue** (conversation), vocabulary, discussion,
+  practice, **media** (audio/video link), comprehension, roleplay, homework,
+  closing. The CEFR `level` field (A1–C2) auto-adjusts timers and vocabulary
+  density. Nothing appears in the Library until you register it yourself.
 
 ## Suggested class flow (60–90 min)
 

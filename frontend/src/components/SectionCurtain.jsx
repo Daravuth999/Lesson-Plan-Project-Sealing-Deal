@@ -17,8 +17,10 @@ const ROMAN = {
  * SectionCurtain — Cinematic "act break" between sections.
  * Renders a gold horizontal sweep that closes over the stage,
  * reveals a huge Roman numeral, then withdraws to reveal the new section.
+ * `info` (optional): { [sectionId]: { num, label } } for template lessons;
+ * defaults to the legacy Sealing-the-Deal map.
  */
-export default function SectionCurtain({ section }) {
+export default function SectionCurtain({ section, info }) {
   const [visible, setVisible] = useState(false);
   const [displaySection, setDisplaySection] = useState(section);
 
@@ -31,7 +33,8 @@ export default function SectionCurtain({ section }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [section]);
 
-  const info = ROMAN[displaySection] || { num: "", label: "" };
+  const meta =
+    (info && info[displaySection]) || ROMAN[displaySection] || { num: "", label: "" };
 
   return (
     <AnimatePresence>
@@ -80,13 +83,13 @@ export default function SectionCurtain({ section }) {
             transition={{ duration: 0.5, delay: 0.5 }}
           >
             <div className="mono text-[11px] uppercase tracking-[0.42em] text-gold-300 mb-4">
-              Section {info.num}
+              Section {meta.num}
             </div>
             <div className="heading-serif text-[9rem] leading-none text-gold-50 italic">
-              {info.num}
+              {meta.num}
             </div>
             <div className="heading-serif text-3xl text-gray-200 mt-6">
-              {info.label}
+              {meta.label}
             </div>
           </motion.div>
         </motion.div>

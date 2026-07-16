@@ -11,6 +11,8 @@ export default function InstructorNav({
   goTo,
   sectionTitle,
   slideTitle,
+  sections = SECTIONS,
+  deckTitle = "Sealing the Deal",
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -96,6 +98,8 @@ export default function InstructorNav({
               setMenuOpen(false);
             }}
             current={current}
+            sections={sections}
+            deckTitle={deckTitle}
           />
         )}
       </AnimatePresence>
@@ -103,7 +107,7 @@ export default function InstructorNav({
   );
 }
 
-function SectionMenu({ close, goTo, current }) {
+function SectionMenu({ close, goTo, current, sections = SECTIONS, deckTitle = "Sealing the Deal" }) {
   return (
     <motion.div
       className="absolute inset-0 z-50 grain"
@@ -127,10 +131,10 @@ function SectionMenu({ close, goTo, current }) {
           Lesson Sections
         </div>
         <h2 className="heading-serif text-5xl text-gold-50 mb-10">
-          Sealing the Deal
+          {deckTitle}
         </h2>
         <div className="grid grid-cols-3 gap-5 max-w-5xl w-full">
-          {SECTIONS.map((s, idx) => {
+          {sections.map((s, idx) => {
             const isActive = current >= s.range[0] && current <= s.range[1];
             return (
               <motion.button
