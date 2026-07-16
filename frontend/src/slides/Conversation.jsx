@@ -4,6 +4,7 @@ import { DIALOGUE_PART_1, DIALOGUE_PART_2, VOCAB } from "../data/lesson";
 import ClickReveal from "../components/ClickReveal";
 import SpeakerAvatar from "../components/SpeakerAvatar";
 import NowSpeakingCaption from "../components/NowSpeakingCaption";
+import RehearsalScript from "../components/RehearsalScript";
 
 const vocabLookup = Object.fromEntries(VOCAB.map((v) => [v.word.toLowerCase(), v]));
 
@@ -257,42 +258,34 @@ export function Slide13() {
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto scroll-elegant pr-3 -mr-2">
-        <div className="space-y-3 max-w-5xl">
-          {allTurns.map((turn, idx) => {
-            const dim =
-              (focus === "sarah" && turn.role !== "Sarah") ||
-              (focus === "david" && turn.role !== "David");
-            const cue = emotionCue(turn.role, idx);
-            return (
-              <div
-                key={idx}
-                className={`flex gap-4 ${
-                  turn.role === "Sarah" ? "" : "flex-row-reverse text-right"
-                } transition-opacity ${dim ? "opacity-25" : "opacity-100"}`}
-              >
-                <div
-                  className={`shrink-0 w-14 heading-serif text-base pt-1 ${
-                    turn.role === "Sarah" ? "text-gold-300" : "text-thoughtful"
-                  }`}
-                >
-                  {turn.role}
-                </div>
-                <div className="max-w-3xl">
-                  {cue && (
-                    <div className="mono text-[10px] uppercase tracking-widest text-gold-300 mb-0.5">
-                      ({cue})
-                    </div>
-                  )}
-                  <div className="text-base leading-relaxed text-gray-100">
-                    {renderLine(turn.line, `perf-${idx}`, activeCue, setActiveCue, showVocab)}
+      <RehearsalScript
+        turns={allTurns.map((turn, idx) => {
+          const cue = emotionCue(turn.role, idx);
+          return {
+            role: turn.role,
+            plain: turn.line
+              .map((c) => (typeof c === "string" ? c : c.text))
+              .join(""),
+            node: (
+              <>
+                {cue && (
+                  <div className="mono text-[10px] uppercase tracking-widest text-gold-300 mb-0.5">
+                    ({cue})
                   </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+                )}
+                {renderLine(turn.line, `perf-${idx}`, activeCue, setActiveCue, showVocab)}
+              </>
+            ),
+          };
+        })}
+        colorOf={(role) => (role === "Sarah" ? "#E6B863" : "#6BA8E8")}
+        sideOf={(role) => (role === "Sarah" ? "left" : "right")}
+        isDimmed={(role) =>
+          (focus === "sarah" && role !== "Sarah") ||
+          (focus === "david" && role !== "David")
+        }
+        testIdBase="rehearsal"
+      />
     </div>
   );
 }

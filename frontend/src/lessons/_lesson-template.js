@@ -13,9 +13,20 @@
  * This template file is NOT registered, so it never appears to students.
  *
  * Available block types:
- *   title · outcomes · image · story · dialogue · vocabulary · discussion
- *   practice · media (audio/video link) · comprehension · roleplay
- *   homework · closing
+ *   title · outcomes · image · story · dialogue · rehearsal · vocabulary
+ *   discussion · practice · media (audio/video link) · comprehension
+ *   roleplay · homework · closing
+ *
+ * "rehearsal" = hands-free role-play teleprompter: same turns as a dialogue
+ * block, but a spotlight walks the script automatically (R starts, Space
+ * pauses, arrows nudge) so the teacher stays passive while students perform:
+ *   {
+ *     type: "rehearsal",
+ *     title: "",
+ *     turns: [
+ *       // { role: "Anna", text: "…" },
+ *     ],
+ *   }
  *
  * The `level` field (A1–C2) automatically adjusts speaking-timer lengths and
  * vocabulary density. Any block can override, e.g. { timerSeconds: 120 }.

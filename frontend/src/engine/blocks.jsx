@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Film, Music, ChevronDown } from "lucide-react";
 import ClickReveal from "../components/ClickReveal";
 import Timer from "../components/Timer";
+import RehearsalScript from "../components/RehearsalScript";
 
 /* ============================================================
    Shared shell — matches the visual idiom of the legacy slides
@@ -237,6 +238,29 @@ function DialogueBlock({ block, kicker, speakers }) {
           })}
         </div>
       </div>
+    </SlideShell>
+  );
+}
+
+/**
+ * RehearsalBlock — hands-free role-play teleprompter over a dialogue script.
+ * Same turns shape as the dialogue block; press R to start, Space to pause.
+ */
+function RehearsalBlock({ block, kicker, speakers }) {
+  const names = Object.keys(speakers);
+  const colorOf = (role) => (speakers[role] || {}).color || "#DEB966";
+  const sideOf = (role) => (names.indexOf(role) % 2 === 0 ? "left" : "right");
+  return (
+    <SlideShell kicker={kicker} title={block.title || "Rehearsal"} tight>
+      <RehearsalScript
+        turns={(block.turns || []).map((t) => ({
+          role: t.role,
+          plain: t.text,
+          node: t.text,
+        }))}
+        colorOf={colorOf}
+        sideOf={sideOf}
+      />
     </SlideShell>
   );
 }
@@ -496,6 +520,7 @@ export const BLOCK_RENDERERS = {
   image: ImageBlock,
   story: StoryBlock,
   dialogue: DialogueBlock,
+  rehearsal: RehearsalBlock,
   vocabulary: VocabularyBlock,
   discussion: DiscussionBlock,
   practice: PracticeBlock,

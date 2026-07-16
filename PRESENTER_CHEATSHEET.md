@@ -26,6 +26,22 @@ HUD is hidden, so nothing instructor-facing ever appears on the shared screen.
 | `C` | Chat Wall | Displaying student Zoom-chat responses |
 | `Z` | Zoom-Safe Scale | Bump size + contrast when students are on phones |
 
+## Rehearsal Mode (Screen 13 · Performance Mode)
+Hands-free role-play: a golden spotlight walks down the full dialogue
+(parts 1 + 2 combined) at a natural reading pace and auto-scrolls — you stay
+passive and just listen while students perform.
+
+| Key | Action |
+|-----|--------|
+| `R` | Start rehearsal (3-2-1 count-in) · press again to stop |
+| `Space` | Pause / resume **while rehearsing** (otherwise Space = next slide) |
+| `↑` / `↓` | Nudge the spotlight back / forward a turn |
+| Calm / Natural / Brisk | Pace chips — pick per class level |
+
+At the end it offers "Rehearse again" — loop through as many pairs as you like.
+The Sarah/David focus toggles still work, so a pair can rehearse one role with
+the other side dimmed.
+
 ## Lesson Library (multi-lesson factory)
 - Press `P` → click the **book icon** (or open `#/library`) to switch lessons.
 - The root URL always opens **Sealing the Deal**, exactly as your students know it.
