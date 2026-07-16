@@ -1,13 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Presentation, ArrowLeft } from "lucide-react";
-import { LESSONS } from "./lessons";
+import { Presentation, ArrowLeft, Pencil } from "lucide-react";
+import { getAllLessons } from "./lessons";
 
 /**
  * Library — instructor-only lesson catalog. Reached via #/library
  * (from the presenter HUD, hotkey P), never shown during presentation.
  */
 export default function Library() {
+  const lessons = getAllLessons();
   return (
     <div className="relative w-screen h-screen stage-bg overflow-y-auto scroll-elegant grain">
       <div className="max-w-6xl mx-auto px-10 py-14">
@@ -23,13 +24,22 @@ export default function Library() {
           Instructor Library
         </div>
         <h1 className="heading-serif text-6xl text-gold-50 mb-3">Lesson Library</h1>
-        <p className="text-gray-400 max-w-2xl mb-12">
-          Every lesson in the factory — the original decks and new template
-          lessons. Open one to present it; students only ever see the stage.
+        <p className="text-gray-400 max-w-2xl mb-8">
+          Every lesson in the factory — the original decks and lessons you
+          created in the Instructor Panel. Open one to present it; students
+          only ever see the stage.
         </p>
 
+        <button
+          onClick={() => (window.location.hash = "#/builder")}
+          className="inline-flex items-center gap-2 mono text-[10px] uppercase tracking-widest px-4 py-2 rounded-full border border-gold-300 bg-gold-300/15 text-gold-50 hover:bg-gold-300/25 transition-colors mb-10"
+          data-testid="library-open-builder"
+        >
+          <Pencil size={12} /> Open Lesson Builder
+        </button>
+
         <div className="grid grid-cols-2 gap-6">
-          {LESSONS.map((lesson, i) => (
+          {lessons.map((lesson, i) => (
             <motion.button
               key={lesson.slug}
               initial={{ opacity: 0, y: 14 }}
@@ -46,6 +56,11 @@ export default function Library() {
                 <span className="mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full border border-thoughtful/40 text-thoughtful">
                   {lesson.style}
                 </span>
+                {lesson.source === "device" && (
+                  <span className="mono text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full border border-rise/40 text-rise">
+                    my lesson
+                  </span>
+                )}
                 <span className="ml-auto mono text-[10px] uppercase tracking-widest text-gray-500">
                   {lesson.screenCount} screens
                 </span>
@@ -66,8 +81,7 @@ export default function Library() {
         </div>
 
         <div className="mono text-[10px] uppercase tracking-[0.28em] text-gray-600 mt-12">
-          To add a lesson: duplicate a definition in src/lessons, edit the
-          content, register it in src/lessons/index.js.
+          Create new lessons in the Lesson Builder above — no code needed.
         </div>
       </div>
     </div>

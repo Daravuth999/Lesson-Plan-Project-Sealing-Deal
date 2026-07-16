@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Deck from "./Deck";
 import Library from "./Library";
+import Builder from "./Builder";
 import { getLesson, DEFAULT_SLUG } from "./lessons";
 
 /**
  * App — tiny hash router.
  *   (no hash)          → the default lesson, exactly as always (bookmark-safe)
  *   #/library          → instructor lesson catalog (reached via presenter HUD)
- *   #/lesson/<slug>    → any lesson in the registry
+ *   #/builder          → instructor panel: author lessons without code
+ *   #/lesson/<slug>    → any lesson in the registry (built-in or device)
  */
 function useHashRoute() {
   const [hash, setHash] = useState(window.location.hash);
@@ -23,6 +25,7 @@ export default function App() {
   const hash = useHashRoute();
 
   if (hash.startsWith("#/library")) return <Library />;
+  if (hash.startsWith("#/builder")) return <Builder />;
 
   const match = hash.match(/^#\/lesson\/([\w-]+)/);
   const slug = match ? match[1] : DEFAULT_SLUG;

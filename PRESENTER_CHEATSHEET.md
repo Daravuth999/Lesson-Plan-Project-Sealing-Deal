@@ -47,13 +47,19 @@ the other side dimmed.
 - The root URL always opens **Sealing the Deal**, exactly as your students know it.
 - Each lesson also has a direct link: `#/lesson/<name>`.
 - Add `?screen=14` to any lesson URL to resume directly at screen 14 after a refresh.
-- New lessons are plain content files: duplicate
-  `frontend/src/lessons/_lesson-template.js`, fill in YOUR content, register it
-  in `lessons/index.js`. Blocks available: title, outcomes, image, **story**
-  (storytelling beats), **dialogue** (conversation), vocabulary, discussion,
-  practice, **media** (audio/video link), comprehension, roleplay, homework,
-  closing. The CEFR `level` field (A1–C2) auto-adjusts timers and vocabulary
-  density. Nothing appears in the Library until you register it yourself.
+
+## Lesson Builder — create lessons with NO code
+- Library → **Open Lesson Builder** (or `#/builder`). Students never see it.
+- **New lesson** → fill in the forms: title, level (A1–C2, auto-adjusts
+  timers), speakers/characters, then add screens per section from 14 block
+  types: title, outcomes, image, story, dialogue, **rehearsal**, vocabulary,
+  discussion, practice, media (audio/video link), comprehension, roleplay,
+  homework, closing.
+- Dialogue/story text is typed naturally — one line per turn, `Name: sentence`.
+- Everything **saves automatically** and appears in your Library instantly.
+- Lessons live **in this browser** (not on the public site) — click
+  **Export backup** after editing; **Import backup** restores them on any device.
+- Power users can still author lessons as files (`_lesson-template.js`).
 
 ## Suggested class flow (60–90 min)
 
