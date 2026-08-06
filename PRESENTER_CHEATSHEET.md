@@ -26,6 +26,13 @@ HUD is hidden, so nothing instructor-facing ever appears on the shared screen.
 | `C` | Chat Wall | Displaying student Zoom-chat responses |
 | `Z` | Zoom-Safe Scale | Bump size + contrast when students are on phones |
 
+## Watch the Model (Screen 13 · Performance Mode)
+A "Watch the Model" chip (top-right of Screen 13, next to Vocab/Emotion) opens
+an inline video of the conversation performed aloud. Play it for the class
+*before* starting Rehearsal Mode below — students hear the target pace,
+stress, and tone once, then perform it themselves. Click the chip again to
+collapse the player before you press `R`.
+
 ## Rehearsal Mode (Screen 13 · Performance Mode)
 Hands-free role-play: a golden spotlight walks down the full dialogue
 (parts 1 + 2 combined) at a natural reading pace and auto-scrolls — you stay
@@ -67,7 +74,7 @@ the other side dimmed.
 2. **Screens 3–4** · Observation & speaking challenge — start the **60s timer** on Screen 4. Use `L` (laser) to point at details in the meeting photo.
 3. **Screens 5–6** · Prediction & warm-up — turn on `C` (Chat Wall) and post 2–3 student responses.
 4. **Screens 7–9** · Vocabulary — use Guess Mode (Screen 8); reveal *IPA → POS → Meaning → Collocations* in that order for each word.
-5. **Screens 10–13** · Conversation — click each turn to highlight the active speaker; use `L` (laser) to point at vocabulary; students read along.
+5. **Screens 10–13** · Conversation — click each turn to highlight the active speaker; use `L` (laser) to point at vocabulary; students read along. On Screen 13, play **Watch the Model** once, then run **Rehearsal Mode** (`R`) for role play.
 6. **Screen 14** · Strategy — click each strategy card to reveal the matching quote from the script.
 7. **Screens 15–19** · Pronunciation — use `I` (ink) to underline stressed syllables and draw intonation curves by hand.
 8. **Screens 20–24** · Practice — shadowing (`Show stress` + `Show intonation` toggles).

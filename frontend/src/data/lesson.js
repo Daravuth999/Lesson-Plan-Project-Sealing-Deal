@@ -15,6 +15,10 @@ export const SECTIONS = [
 export const IMAGE_URL =
   "https://static.prod-images.emergentagent.com/jobs/f59c153e-b4b1-4f32-a4c2-ae30d3b13e32/images/db4ce56fc8dbcc2d378ed6b03de73f456d54b5ddd0beb10ca10bef2ff4a1f36c.png";
 
+// Model conversation video — played on Screen 13 before students role-play.
+export const CONVERSATION_VIDEO_URL =
+  "https://pub-a32e06b860c14582adf3619ade1a4346.r2.dev/copy_620DA919-2E93-45B6-BEB9-E72AFE1E0984.mov";
+
 export const VOCAB = [
   {
     word: "negotiate",

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { DIALOGUE_PART_1, DIALOGUE_PART_2, VOCAB } from "../data/lesson";
+import { DIALOGUE_PART_1, DIALOGUE_PART_2, VOCAB, CONVERSATION_VIDEO_URL } from "../data/lesson";
+import { Film, ChevronDown, ChevronUp } from "lucide-react";
 import ClickReveal from "../components/ClickReveal";
 import SpeakerAvatar from "../components/SpeakerAvatar";
 import NowSpeakingCaption from "../components/NowSpeakingCaption";
@@ -193,6 +194,7 @@ export function Slide13() {
   const [showVocab, setShowVocab] = useState(true);
   const [showEmotion, setShowEmotion] = useState(true);
   const [activeCue, setActiveCue] = useState(null);
+  const [showVideo, setShowVideo] = useState(false);
   const allTurns = useMemo(() => [...DIALOGUE_PART_1, ...DIALOGUE_PART_2], []);
 
   const emotionCue = (role, idx) => {
@@ -256,8 +258,37 @@ export function Slide13() {
           >
             Emotion
           </button>
+          <div className="w-px h-4 bg-gold-300/25 mx-1" />
+          <button
+            data-testid="perf-video-toggle"
+            onClick={() => setShowVideo((v) => !v)}
+            className={`inline-flex items-center gap-1.5 mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full border transition-colors ${
+              showVideo
+                ? "border-gold-300 bg-gold-300/15 text-gold-50"
+                : "border-gold-300/25 text-gray-400 hover:text-gold-100"
+            }`}
+          >
+            <Film size={11} />
+            Watch the Model
+            {showVideo ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
+          </button>
         </div>
       </div>
+
+      {showVideo && (
+        <div className="mb-4 flex flex-col items-center" data-testid="perf-video-panel">
+          <video
+            src={CONVERSATION_VIDEO_URL}
+            controls
+            className="w-full max-w-3xl max-h-[46vh] rounded-xl border border-gold-300/25 shadow-stage bg-black"
+            data-testid="perf-video-player"
+          />
+          <div className="mono text-[10px] uppercase tracking-[0.28em] text-gray-500 mt-2">
+            Play for the class, then close this panel and start rehearsal
+          </div>
+        </div>
+      )}
+
       <RehearsalScript
         turns={allTurns.map((turn, idx) => {
           const cue = emotionCue(turn.role, idx);
