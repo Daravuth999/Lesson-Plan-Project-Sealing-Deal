@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DIALOGUE_PART_1, DIALOGUE_PART_2, VOCAB, CONVERSATION_VIDEO_URL } from "../data/lesson";
-import { Film, ChevronDown, ChevronUp } from "lucide-react";
+import { Film } from "lucide-react";
 import ClickReveal from "../components/ClickReveal";
 import SpeakerAvatar from "../components/SpeakerAvatar";
 import NowSpeakingCaption from "../components/NowSpeakingCaption";
@@ -55,39 +55,71 @@ function renderLine(line, keyBase, activeCue, setActiveCue, showVocab = true) {
 /* -------------------- Screen 10 — Conversation Setup -------------------- */
 export function Slide10() {
   return (
-    <div className="h-full w-full px-24 py-16 flex flex-col justify-center">
+    <div className="h-full w-full px-16 py-12 flex flex-col">
       <div className="mono text-xs uppercase tracking-[0.32em] text-gold-300 mb-3">
         Screen 10 · Conversation Setup
       </div>
-      <h2 className="heading-serif text-6xl text-gold-50 mb-16 max-w-4xl leading-[1.05]">
+      <h2 className="heading-serif text-5xl text-gold-50 mb-8 max-w-4xl leading-[1.05]">
         The final contract meeting.
       </h2>
-      <div className="grid grid-cols-2 gap-14 max-w-5xl">
-        {[
-          { name: "Sarah", tag: "Sales & Partnerships" },
-          { name: "David", tag: "Head of Procurement" },
-        ].map((p, i) => (
-          <motion.div
-            key={p.name}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 + i * 0.15, duration: 0.6 }}
-            className="flex flex-col gap-4"
-          >
-            <div className="scale-[1.6] origin-left">
-              <SpeakerAvatar role={p.name} active size={72} />
+
+      <div className="flex-1 grid grid-cols-2 gap-12 min-h-0">
+        {/* Left — who's meeting, and why */}
+        <div className="flex flex-col justify-center">
+          <div className="grid grid-cols-2 gap-10 mb-10">
+            {[
+              { name: "Sarah", tag: "Sales & Partnerships" },
+              { name: "David", tag: "Head of Procurement" },
+            ].map((p, i) => (
+              <motion.div
+                key={p.name}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 + i * 0.15, duration: 0.6 }}
+                className="flex flex-col gap-4"
+              >
+                <div className="scale-[1.4] origin-left">
+                  <SpeakerAvatar role={p.name} active size={64} />
+                </div>
+                <div className="text-gray-400 italic text-base mt-5">{p.tag}</div>
+              </motion.div>
+            ))}
+          </div>
+          <div className="max-w-md">
+            <div className="mono text-[10px] uppercase tracking-[0.32em] text-gold-300 mb-2">
+              Situation
             </div>
-            <div className="text-gray-400 italic text-lg mt-6">{p.tag}</div>
-          </motion.div>
-        ))}
-      </div>
-      <div className="mt-14 max-w-3xl">
-        <div className="mono text-[10px] uppercase tracking-[0.32em] text-gold-300 mb-2">
-          Situation
+            <p className="heading-serif italic text-2xl text-gray-200">
+              They are negotiating the final terms of the contract.
+            </p>
+          </div>
         </div>
-        <p className="heading-serif italic text-2xl text-gray-200">
-          They are negotiating the final terms of the contract.
-        </p>
+
+        {/* Right — model video, front and center before reading the script */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="flex flex-col min-h-0"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Film size={14} className="text-gold-300" />
+            <div className="mono text-[10px] uppercase tracking-[0.32em] text-gold-300">
+              Watch the Model Conversation
+            </div>
+          </div>
+          <div className="flex-1 min-h-0 flex items-center justify-center rounded-xl border border-gold-300/25 shadow-stage bg-black overflow-hidden">
+            <video
+              src={CONVERSATION_VIDEO_URL}
+              controls
+              className="w-full h-full max-h-full object-contain"
+              data-testid="setup-video-player"
+            />
+          </div>
+          <div className="mono text-[10px] uppercase tracking-[0.28em] text-gray-500 mt-2">
+            Play it for the class before Screens 11–13
+          </div>
+        </motion.div>
       </div>
     </div>
   );
@@ -194,7 +226,6 @@ export function Slide13() {
   const [showVocab, setShowVocab] = useState(true);
   const [showEmotion, setShowEmotion] = useState(true);
   const [activeCue, setActiveCue] = useState(null);
-  const [showVideo, setShowVideo] = useState(false);
   const allTurns = useMemo(() => [...DIALOGUE_PART_1, ...DIALOGUE_PART_2], []);
 
   const emotionCue = (role, idx) => {
@@ -258,36 +289,8 @@ export function Slide13() {
           >
             Emotion
           </button>
-          <div className="w-px h-4 bg-gold-300/25 mx-1" />
-          <button
-            data-testid="perf-video-toggle"
-            onClick={() => setShowVideo((v) => !v)}
-            className={`inline-flex items-center gap-1.5 mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full border transition-colors ${
-              showVideo
-                ? "border-gold-300 bg-gold-300/15 text-gold-50"
-                : "border-gold-300/25 text-gray-400 hover:text-gold-100"
-            }`}
-          >
-            <Film size={11} />
-            Watch the Model
-            {showVideo ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
-          </button>
         </div>
       </div>
-
-      {showVideo && (
-        <div className="mb-4 flex flex-col items-center" data-testid="perf-video-panel">
-          <video
-            src={CONVERSATION_VIDEO_URL}
-            controls
-            className="w-full max-w-3xl max-h-[46vh] rounded-xl border border-gold-300/25 shadow-stage bg-black"
-            data-testid="perf-video-player"
-          />
-          <div className="mono text-[10px] uppercase tracking-[0.28em] text-gray-500 mt-2">
-            Play for the class, then close this panel and start rehearsal
-          </div>
-        </div>
-      )}
 
       <RehearsalScript
         turns={allTurns.map((turn, idx) => {
